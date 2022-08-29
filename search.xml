@@ -106,6 +106,142 @@
       </tags>
   </entry>
   <entry>
+    <title>lsf4j日志门面整合多种日志框架</title>
+    <url>/2022/06/14/lsf4j%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2%E6%95%B4%E5%90%88%E5%A4%9A%E7%A7%8D%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<h1 id="lsf4j日志门面整合多种日志框架"><a href="#lsf4j日志门面整合多种日志框架" class="headerlink" title="lsf4j日志门面整合多种日志框架"></a>lsf4j日志门面整合多种日志框架</h1><h2 id="什么是日志门面"><a href="#什么是日志门面" class="headerlink" title="什么是日志门面"></a>什么是日志门面</h2><h3 id="什么是门面，为什么要使用门面"><a href="#什么是门面，为什么要使用门面" class="headerlink" title="什么是门面，为什么要使用门面"></a>什么是门面，为什么要使用门面</h3><p>门面指的是一种设计模式–<a href="https://www.runoob.com/w3cnote/facade-pattern-3.html">JAVA设计模式之门面模式（外观模式）</a>，文中总结了门面模式的优点：</p>
+<blockquote>
+<p>松散耦合: 门面模式松散了客户端与子系统的耦合关系，让子系统内部的模块能更容易扩展和维护。</p>
+<p>简单易用: 门面模式让子系统更加易用，客户端不再需要了解子系统内部的实现，也不需要跟众多子系统内部的模块进行交互，只需要跟门面类交互就可以了。</p>
+<p>更好的划分访问层次: 通过合理使用Facade，可以帮助我们更好地划分访问的层次。有些方法是对系统外的，有些方法是系统内部使用的。把需要暴露给外部的功能集中到门面中，这样既方便客户端使用，也很好地隐藏了内部的细节。</p>
+</blockquote>
+<p>而标题中所提到的<code>lsf4j</code>正是常用的日志门面之一。当我们引入日志门面框架并使用其接口时，不论系统中使用的是哪种种框架，<strong>只要符合日志门面框架的接口就能随时切换</strong>；当我们系统中引用了jar包时，也可以<strong>排除掉jar包使用的日志框架，使得日志格式保持一致</strong>，以便后续对日志进行分析挖掘。</p>
+<h2 id="常用的日志门面有哪些"><a href="#常用的日志门面有哪些" class="headerlink" title="常用的日志门面有哪些"></a>常用的日志门面有哪些</h2><ul>
+<li><strong><code>slf4j</code></strong></li>
+<li><code>JCL</code></li>
+</ul>
+<blockquote>
+<p><code>lsf4j</code>是目前市面上最流行的日志门面，使用 <code>lsf4j</code>可以很灵活的使用占位符进行参数占位，简化代码，拥有更好的可读性。</p>
+</blockquote>
+<h2 id="常用的日志框架及其引入方式"><a href="#常用的日志框架及其引入方式" class="headerlink" title="常用的日志框架及其引入方式"></a>常用的日志框架及其引入方式</h2><ul>
+<li><p><strong>Log4j</strong></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>Log4j2</strong></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p><strong>LogBack</strong></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- slf4j --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.slf4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>slf4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+  
+<span class="token comment">&lt;!-- logback --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-classic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-access<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h2 id="常用日志框架如何使用lsf4j门面"><a href="#常用日志框架如何使用lsf4j门面" class="headerlink" title="常用日志框架如何使用lsf4j门面"></a>常用日志框架如何使用<code>lsf4j</code>门面</h2><table>
+<thead>
+<tr>
+<th>框架名称</th>
+<th>如何使用<code>lsf4j</code>标准</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Log4j</code></td>
+<td>添加<code>slf4j-log4j12</code>依赖</td>
+</tr>
+<tr>
+<td><code>Log4j2</code></td>
+<td>添加<code>log4j-slf4j-impl</code>依赖</td>
+</tr>
+<tr>
+<td><code>LogBack</code></td>
+<td>无须操作,自身已实现<code>slf4j</code>标准(从<a href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BC%95%E5%85%A5%E6%96%B9%E5%BC%8F"><code>LogBack</code>配置文件也可看出</a>)</td>
+</tr>
+</tbody></table>
+<h2 id="lsf4j整合Log4j-LogBack-Log4j2"><a href="#lsf4j整合Log4j-LogBack-Log4j2" class="headerlink" title="lsf4j整合Log4j,LogBack,Log4j2"></a><code>lsf4j</code>整合<code>Log4j</code>,<code>LogBack</code>,<code>Log4j2</code></h2><p>当我们系统中引用了jar包时，很容易就造成系统中存在多种日志框架共存的局面。</p>
+<ul>
+<li><p>多数场景下，引入的jar都是实现了<code>lsf4j</code>门面标准。我们可以在<code>pom</code>文件中，找到<strong>引入其他日志框架的jar</strong>,通过<code>exclusion</code>标签将该日志框架排除。</p>
+<table>
+<thead>
+<tr>
+<th>框架名称</th>
+<th>删除依赖</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Log4j</code></td>
+<td><del><code>log4j</code></del>,<del><code>slf4j-log4j12</code></del></td>
+</tr>
+<tr>
+<td><code>Log4j2</code></td>
+<td><del><code>log4j-api</code></del>,<del><code>log4j-core</code></del></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>凡事都有例外，在一些场景中，<strong>引入的jar没有实现<code>lsf4j</code>门面标准，也没有办法修改源码，添加lsf4j门面标准</strong>（即无法通过<a href="#%E5%B8%B8%E7%94%A8%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%60lsf4j%60%E9%97%A8%E9%9D%A2">添加依赖的方式使用<code>lsf4j</code>门面</a>），那该怎么办呢？答案还是修改<code>pom</code>文件，<strong>排除掉未实现<code>lsf4j</code>门面标准的jar，并引入新的依赖，新的依赖使用适配器模式，使其实现<code>lsf4j</code>门面标准。</strong></p>
+<table>
+<thead>
+<tr>
+<th>框架名称</th>
+<th>删除依赖</th>
+<th>补充依赖</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Log4j</code></td>
+<td><del><code>log4j</code></del></td>
+<td><code>log4j-over-slf4j</code></td>
+</tr>
+<tr>
+<td><code>Log4j2</code></td>
+<td><del><code>log4j-api</code></del>,<del><code>log4j-core</code></del></td>
+<td><code>log4j-to-slf4j</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>log</category>
+      </categories>
+      <tags>
+        <tag>lsf4j</tag>
+        <tag>Log4j</tag>
+        <tag>Log4j2</tag>
+        <tag>LogBack</tag>
+        <tag>maven</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>java8时间类</title>
     <url>/2022/07/02/java8%E6%97%B6%E9%97%B4%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="java8时间类"><a href="#java8时间类" class="headerlink" title="java8时间类"></a>java8时间类</h1><h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ol>
@@ -127,7 +263,7 @@
 <li><code>UTC</code> <code> Coordinated Universal Time</code> 协调世界时。每隔几年都会给世界时+1秒，让(<code>UT</code>)和(<code>GMT</code>)相差不至于太大。并将得到的时间称为<code>UTC</code>。</li>
 <li>协调世界时不与任何地区位置相关，也不代表此刻某地的时间，所以在说明某地时间时要加上时区</li>
 </ul>
-<h2 id="常用类介绍"><a href="#常用类介绍" class="headerlink" title="常用类介绍"></a>常用类介绍</h2><p><img data-src="http://fastly.jsdelivr.net/gh/Inoriii/picture-home/img/blog-picture/java8-time-about.png" alt="java8常用时间类"></p>
+<h2 id="常用类介绍"><a href="#常用类介绍" class="headerlink" title="常用类介绍"></a>常用类介绍</h2><p><img data-src="http://gcore.jsdelivr.net/gh/Inoriii/picture-home/img/blog-picture/java8-time-about.png" alt="java8常用时间类"></p>
 <table>
 <thead>
 <tr>
@@ -528,142 +664,6 @@ application-test.yml<span aria-hidden="true" class="line-numbers-rows"><span></s
       </tags>
   </entry>
   <entry>
-    <title>lsf4j日志门面整合多种日志框架</title>
-    <url>/2022/06/14/lsf4j%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2%E6%95%B4%E5%90%88%E5%A4%9A%E7%A7%8D%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<h1 id="lsf4j日志门面整合多种日志框架"><a href="#lsf4j日志门面整合多种日志框架" class="headerlink" title="lsf4j日志门面整合多种日志框架"></a>lsf4j日志门面整合多种日志框架</h1><h2 id="什么是日志门面"><a href="#什么是日志门面" class="headerlink" title="什么是日志门面"></a>什么是日志门面</h2><h3 id="什么是门面，为什么要使用门面"><a href="#什么是门面，为什么要使用门面" class="headerlink" title="什么是门面，为什么要使用门面"></a>什么是门面，为什么要使用门面</h3><p>门面指的是一种设计模式–<a href="https://www.runoob.com/w3cnote/facade-pattern-3.html">JAVA设计模式之门面模式（外观模式）</a>，文中总结了门面模式的优点：</p>
-<blockquote>
-<p>松散耦合: 门面模式松散了客户端与子系统的耦合关系，让子系统内部的模块能更容易扩展和维护。</p>
-<p>简单易用: 门面模式让子系统更加易用，客户端不再需要了解子系统内部的实现，也不需要跟众多子系统内部的模块进行交互，只需要跟门面类交互就可以了。</p>
-<p>更好的划分访问层次: 通过合理使用Facade，可以帮助我们更好地划分访问的层次。有些方法是对系统外的，有些方法是系统内部使用的。把需要暴露给外部的功能集中到门面中，这样既方便客户端使用，也很好地隐藏了内部的细节。</p>
-</blockquote>
-<p>而标题中所提到的<code>lsf4j</code>正是常用的日志门面之一。当我们引入日志门面框架并使用其接口时，不论系统中使用的是哪种种框架，<strong>只要符合日志门面框架的接口就能随时切换</strong>；当我们系统中引用了jar包时，也可以<strong>排除掉jar包使用的日志框架，使得日志格式保持一致</strong>，以便后续对日志进行分析挖掘。</p>
-<h2 id="常用的日志门面有哪些"><a href="#常用的日志门面有哪些" class="headerlink" title="常用的日志门面有哪些"></a>常用的日志门面有哪些</h2><ul>
-<li><strong><code>slf4j</code></strong></li>
-<li><code>JCL</code></li>
-</ul>
-<blockquote>
-<p><code>lsf4j</code>是目前市面上最流行的日志门面，使用 <code>lsf4j</code>可以很灵活的使用占位符进行参数占位，简化代码，拥有更好的可读性。</p>
-</blockquote>
-<h2 id="常用的日志框架及其引入方式"><a href="#常用的日志框架及其引入方式" class="headerlink" title="常用的日志框架及其引入方式"></a>常用的日志框架及其引入方式</h2><ul>
-<li><p><strong>Log4j</strong></p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>Log4j2</strong></p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>LogBack</strong></p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!-- slf4j --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.slf4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>slf4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-  
-<span class="token comment">&lt;!-- logback --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-classic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-access<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-<h2 id="常用日志框架如何使用lsf4j门面"><a href="#常用日志框架如何使用lsf4j门面" class="headerlink" title="常用日志框架如何使用lsf4j门面"></a>常用日志框架如何使用<code>lsf4j</code>门面</h2><table>
-<thead>
-<tr>
-<th>框架名称</th>
-<th>如何使用<code>lsf4j</code>标准</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>Log4j</code></td>
-<td>添加<code>slf4j-log4j12</code>依赖</td>
-</tr>
-<tr>
-<td><code>Log4j2</code></td>
-<td>添加<code>log4j-slf4j-impl</code>依赖</td>
-</tr>
-<tr>
-<td><code>LogBack</code></td>
-<td>无须操作,自身已实现<code>slf4j</code>标准(从<a href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B6%E5%BC%95%E5%85%A5%E6%96%B9%E5%BC%8F"><code>LogBack</code>配置文件也可看出</a>)</td>
-</tr>
-</tbody></table>
-<h2 id="lsf4j整合Log4j-LogBack-Log4j2"><a href="#lsf4j整合Log4j-LogBack-Log4j2" class="headerlink" title="lsf4j整合Log4j,LogBack,Log4j2"></a><code>lsf4j</code>整合<code>Log4j</code>,<code>LogBack</code>,<code>Log4j2</code></h2><p>当我们系统中引用了jar包时，很容易就造成系统中存在多种日志框架共存的局面。</p>
-<ul>
-<li><p>多数场景下，引入的jar都是实现了<code>lsf4j</code>门面标准。我们可以在<code>pom</code>文件中，找到<strong>引入其他日志框架的jar</strong>,通过<code>exclusion</code>标签将该日志框架排除。</p>
-<table>
-<thead>
-<tr>
-<th>框架名称</th>
-<th>删除依赖</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>Log4j</code></td>
-<td><del><code>log4j</code></del>,<del><code>slf4j-log4j12</code></del></td>
-</tr>
-<tr>
-<td><code>Log4j2</code></td>
-<td><del><code>log4j-api</code></del>,<del><code>log4j-core</code></del></td>
-</tr>
-</tbody></table>
-</li>
-<li><p>凡事都有例外，在一些场景中，<strong>引入的jar没有实现<code>lsf4j</code>门面标准，也没有办法修改源码，添加lsf4j门面标准</strong>（即无法通过<a href="#%E5%B8%B8%E7%94%A8%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%60lsf4j%60%E9%97%A8%E9%9D%A2">添加依赖的方式使用<code>lsf4j</code>门面</a>），那该怎么办呢？答案还是修改<code>pom</code>文件，<strong>排除掉未实现<code>lsf4j</code>门面标准的jar，并引入新的依赖，新的依赖使用适配器模式，使其实现<code>lsf4j</code>门面标准。</strong></p>
-<table>
-<thead>
-<tr>
-<th>框架名称</th>
-<th>删除依赖</th>
-<th>补充依赖</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>Log4j</code></td>
-<td><del><code>log4j</code></del></td>
-<td><code>log4j-over-slf4j</code></td>
-</tr>
-<tr>
-<td><code>Log4j2</code></td>
-<td><del><code>log4j-api</code></del>,<del><code>log4j-core</code></del></td>
-<td><code>log4j-to-slf4j</code></td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>log</category>
-      </categories>
-      <tags>
-        <tag>maven</tag>
-        <tag>lsf4j</tag>
-        <tag>Log4j</tag>
-        <tag>Log4j2</tag>
-        <tag>LogBack</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>踩坑：maven项目引入外部jar</title>
     <url>/2022/06/17/%E8%B8%A9%E5%9D%91%EF%BC%9Amaven%E9%A1%B9%E7%9B%AE%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8jar/</url>
     <content><![CDATA[<h1 id="踩坑：maven项目引入外部jar"><a href="#踩坑：maven项目引入外部jar" class="headerlink" title="踩坑：maven项目引入外部jar"></a>踩坑：maven项目引入外部jar</h1><p>项目中遇到一种场景，在编译源码时需要引入外部jar，此时有三种方式，即上传私服，上传本地仓库及在工程中直接引入。但是这三种方式均有坑！</p>
@@ -681,7 +681,7 @@ application-test.yml<span aria-hidden="true" class="line-numbers-rows"><span></s
 <li><p>通过<code>&lt;scope&gt;system&lt;/scope&gt;</code>引入的外部jar<strong>无法</strong>引入<code>外部jar依赖</code>的<code>jar包</code></p>
 </li>
 </ol>
-<h2 id="搭建工程并解析"><a href="#搭建工程并解析" class="headerlink" title="搭建工程并解析"></a>搭建工程并解析</h2><h3 id="工程介绍"><a href="#工程介绍" class="headerlink" title="工程介绍"></a>工程介绍</h3><p><img data-src="http://fastly.jsdelivr.net/gh/Inoriii/picture-home/img/blog-picture/%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB.png" alt="项目依赖关系"></p>
+<h2 id="搭建工程并解析"><a href="#搭建工程并解析" class="headerlink" title="搭建工程并解析"></a>搭建工程并解析</h2><h3 id="工程介绍"><a href="#工程介绍" class="headerlink" title="工程介绍"></a>工程介绍</h3><p><img data-src="http://gcore.jsdelivr.net/gh/Inoriii/picture-home/img/blog-picture/%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB.png" alt="项目依赖关系"></p>
 <h4 id="项目B"><a href="#项目B" class="headerlink" title="项目B"></a>项目B</h4><ul>
 <li><p><code>pom</code>文件</p>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
